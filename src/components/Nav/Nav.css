@@ -1,0 +1,19 @@
+
+.Nav{
+    background-color: #212121;
+    grid-area: nav;
+    align-self: baseline;
+    padding-top: 16px;
+    padding-bottom: 16px;
+}
+.Nav{
+    display: flex;
+    justify-content: space-between;
+    align-content: space-around;
+    padding: 8px;
+}
+.Nav a{
+    font-size: 3rem;
+    font-family: 'SpaceGrotesk-Bold';
+    color: whitesmoke;
+}

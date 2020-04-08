@@ -1,0 +1,22 @@
+
+.Display{
+    grid-area: display;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.ImageSection{
+    max-width: 425px;
+    max-height: 425px;
+    align-self: center;
+}
+.ImageSection img{
+    max-width: 425px;
+    max-height: 425px;
+    box-shadow: 8px 12px 0px #14FC00;
+   
+}
+.Info{
+    margin-top: 20px;
+}

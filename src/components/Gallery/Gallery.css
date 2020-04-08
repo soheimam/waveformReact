@@ -1,0 +1,22 @@
+
+.Gallery{
+    grid-area: gallery;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.GallerySection{
+   
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    
+}
+.GallerySection img {
+    max-width: 125px;
+    max-height: 125px;
+    margin: 10px;
+}

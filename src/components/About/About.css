@@ -1,0 +1,7 @@
+.About p{
+    font-family: 'Open Sans', sans-serif;
+    font-size: 1.2rem;
+}
+.About{
+    grid-area: about;
+}
