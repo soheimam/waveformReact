@@ -29,10 +29,10 @@ class AudioAnalyser extends Component {
   tick() {
 
     this.analyser.getByteFrequencyData(this.frequency);
-    var normalArray = Array.apply([],this.frequency);
+    
 
 
-    this.setState({ audioData: normalArray});
+    this.setState({ audioData: this.frequency});
 
     this.rafId = requestAnimationFrame(this.tick);
   }

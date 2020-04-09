@@ -40,6 +40,29 @@ class AudioVisualiser extends Component {
     } = this.props;
 
     
+
+      // let CalculateRMS = (arr) => Math.sqrt(
+    //   arr
+    //   .map(val => (val * val))
+    //   .reduce((acum, val) => acum + val) / arr.length
+    // );
+
+
+
+    function flatten(arr) {
+      return arr.reduce(function (flat, toFlatten) {
+        return flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten);
+      }, []);
+    }
+
+    var arrayValue = Object.values(audioData)   
+    let oneArray = flatten(arrayValue)
+
+    let amplitude = Math.max(...oneArray) - Math.min(...oneArray);
+
+
+
+
     // const audio = audioData.length === 0? 1024: audioData;
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -68,6 +91,7 @@ class AudioVisualiser extends Component {
         total += audioData[i];
         numFrequencies += 1;
       }
+     
       return  total / numFrequencies;
     }
     // divide by total number of frequencies
@@ -76,47 +100,19 @@ class AudioVisualiser extends Component {
     const lowBass = lowIndex(bass[0]);
     const highBass = highIndex(bass[1]);
     const bassRange = rangeValue(bass[0],bass[1],audioData)
-    console.log(bassRange, 'bass')
+    // console.log(bassRange, 'bass')
 
     const lowMid = lowIndex(mid[0]);
     const highMid = highIndex(mid[1]);
     const midRange = rangeValue(mid[0],mid[1],audioData)
 
-    console.log(midRange, 'mid')
+    // console.log(midRange, 'mid')
 
 
     var total = 0;
     var volume;
 
-    
-
-        for (var i = 0; i < 80; i++) { // get the volume from the first 80 bins, else it gets too loud with treble
-            total += audioData[i];
-        }
-        volume = total;
-
-        console.log(Math.round(volume/60),'vol')
-
-    // let CalculateRMS = (arr) => Math.sqrt(
-    //   arr
-    //   .map(val => (val * val))
-    //   .reduce((acum, val) => acum + val) / arr.length
-    // );
-
-
-    // var values = 0;
-    // var length = audioData.length;
-    // for (var i = 0; i < length; i++) {
-    //   values += (audioData[i]);
-    // }
-    
-  
-    
-
-    // var average = values / length;
-
-    // console.log('average', average)
-
+ 
     const canvas = this.canvas.current;
     canvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
@@ -125,8 +121,8 @@ class AudioVisualiser extends Component {
     var centerX = canvas.width / 2;
     var centerY = canvas.height / 2;
 
-    // const context = canvas.getContext('2d');
-    // context.translate(centerX, centerY);
+    const context = canvas.getContext('2d');
+    context.translate(centerX, centerY);
 
 
     // context.beginPath();
@@ -141,25 +137,25 @@ class AudioVisualiser extends Component {
     // context.arc(10,80,tone,0,2*Math.PI);
     // context.stroke();
 
-    // const numRect = 50;
-    // const radius = 100;
-    // const size = 10;
+    const numRect = 50;
+    const radius = 100;
+    const size = 10;
 
 
-    // for (let i = 0; i < numRect; i++) {
+    for (let i = 0; i < numRect; i++) {
 
-    //   const _bar = new Bar(context, 0, radius, 5, 500);
+      const _bar = new Bar(context, 0, amplitude, 5,100);
 
-    //   context.fillStyle = 'hsla(139, 93%, 53%, 1)';
-    //   //'hsl('+ 360*Math.random() +',70%,80%,1)'
+      // context.fillStyle = 'hsla(139, 93%, 53%, 1)';
+      //'hsl('+ 360*Math.random() +',70%,80%,1)'
 
-    //   context.arc(0, radius, size, 0, 2 * Math.PI, false);
-    //   context.rotate(2 * Math.PI / numRect);
+      context.arc(0, radius, size, 0, 2 * Math.PI, false);
+      context.rotate(2 * Math.PI / numRect);
 
-    //   _bar.draw();
+      _bar.draw();
 
 
-    // }
+    }
 
 
 
