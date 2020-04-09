@@ -18,36 +18,16 @@ class AudioVisualiser extends Component {
 
   draw() {
 
-
-    //  console.log(audioVolume)
-    //  let bass = audioVolume
-
-    //  let CalculateRMS = (arr) => Math.sqrt( 
-    //   arr 
-    //       .map( val => (val * val)) 
-    //       .reduce((acum, val) => acum + val)/arr.length 
-    // ); 
-
-
-    // let RMS = CalculateRMS(bass); 
-
-
-
-
-
     const {
       audioData,
     } = this.props;
 
-    
-
+  
       // let CalculateRMS = (arr) => Math.sqrt(
     //   arr
     //   .map(val => (val * val))
     //   .reduce((acum, val) => acum + val) / arr.length
     // );
-
-
 
     function flatten(arr) {
       return arr.reduce(function (flat, toFlatten) {
@@ -60,9 +40,6 @@ class AudioVisualiser extends Component {
 
     let amplitude = Math.max(...oneArray) - Math.min(...oneArray);
 
-
-
-
     // const audio = audioData.length === 0? 1024: audioData;
     const reducer = (accumulator, currentValue) => accumulator + currentValue;
 
@@ -70,10 +47,11 @@ class AudioVisualiser extends Component {
     const mid = audioData.filter(f => f > 0 && f > 140 && f < 400 );
     // const high = audioData.filter(f => f > 0 && f > 400 && f < 500 );
 
-
-
+    
+   
+    // half the value of the sample stream - 
     let nyquist = 24000;
-    // add up all of the values for the frequencies
+
   
     function lowIndex(lowbass){
      return Math.round(lowbass/ nyquist * audioData.length);  
@@ -97,14 +75,16 @@ class AudioVisualiser extends Component {
     // divide by total number of frequencies
     // var toReturn = total / numFrequencies;
   
-    const lowBass = lowIndex(bass[0]);
-    const highBass = highIndex(bass[1]);
-    const bassRange = rangeValue(bass[0],bass[1],audioData)
-    // console.log(bassRange, 'bass')
+    const bassArray =  flatten(bass)
+    const highBass = Math.max(...bassArray);
+    const lowBass = Math.min(...bassArray);
+    const bassRange = rangeValue(lowBass,highBass,audioData)
+    const bassOutput = bassRange ? bassRange: 60;
 
     const lowMid = lowIndex(mid[0]);
     const highMid = highIndex(mid[1]);
-    const midRange = rangeValue(mid[0],mid[1],audioData)
+    const midRange = rangeValue(lowMid,highMid,audioData)
+    const midOutput = midRange ? midRange: 10;
 
     // console.log(midRange, 'mid')
 
@@ -124,31 +104,14 @@ class AudioVisualiser extends Component {
     const context = canvas.getContext('2d');
     context.translate(centerX, centerY);
 
-
-    // context.beginPath();
-    // context.arc(95,50,average,0,2*Math.PI);
-    // context.stroke();
-
-    // context.beginPath();
-    // context.arc(50,50,RMS,0,2*Math.PI);
-    // context.stroke();
-
-    // context.beginPath();
-    // context.arc(10,80,tone,0,2*Math.PI);
-    // context.stroke();
-
     const numRect = 50;
     const radius = 100;
     const size = 10;
 
 
     for (let i = 0; i < numRect; i++) {
-
-      const _bar = new Bar(context, 0, amplitude, 5,100);
-
-      // context.fillStyle = 'hsla(139, 93%, 53%, 1)';
-      //'hsl('+ 360*Math.random() +',70%,80%,1)'
-
+      
+      const _bar = new Bar(context, 0, radius, 5,amplitude);
       context.arc(0, radius, size, 0, 2 * Math.PI, false);
       context.rotate(2 * Math.PI / numRect);
 
@@ -157,81 +120,9 @@ class AudioVisualiser extends Component {
 
     }
 
+    const _circle = new Circle(context, 0, 0, bassOutput,'#d91c1c');
+    _circle.draw()
 
-
-    // var angle = 0;
-    // var step = (2*Math.PI) / numElements;
-
-    // for(var i = 0; i < numElements.length; i++) {
-    //     var x = Math.round(centerX + radius * Math.cos(angle) - centerX ),
-    //         y = Math.round(centerY + radius * Math.sin(angle) - centerY);
-    //         const _circle = new Circle(context, x, y, 100, 0, 2 * Math.PI)
-
-    //     angle += step;
-    //     _circle.draw()  
-    // };
-
-
-    // let xAxis = [centerX - 200, centerX, centerX + 200];
-
-    // const foo = []
-
-    // for (let index = 0; index < 3; index++) {
-    // const element = array[index];
-    //   const _circle = new Circle(context, xAxis[index], centerY + 200, RMS * 5, 0, 2 * Math.PI)
-    //   foo.push(_circle)
-    //   _circle.draw()  
-    // }
-    // for (let index = 0; index < 3; index++) {
-    // const element = array[index];
-    //   const _circle = new Circle(context, xAxis[index], foo[index].y - 200, average, 0, 2 * Math.PI)
-    //   _circle.draw()  
-    // }
-    // for (let index = 0; index < 3; index++) {
-    //   // const element = array[index];
-    //   const _circle = new Circle(context, xAxis[index], foo[index].y - 400, average, 0, 2 * Math.PI)
-    //   _circle.draw()
-
-    //}
-
-    // let xAxis3 = [centerX - 200, centerX, centerX + 200];
-
-    // for (let index = 0; index < 3; index++) {
-    //   // const element = array[index];
-    //   const _circle = new Circle(context, xAxis3[index], foo[index].y - 400, 100, 0, 2 * Math.PI)
-    //   _circle.draw()
-
-    // }
-
-    // _circle1.draw();
-    // _circle2.draw();
-    // _circle3.draw();
-
-
-    // context.arc(centerX, centerY, 100, 0, 2 * Math.PI, false);
-    // // context.fillStyle = 'green';
-    // context.fill();
-
-
-    // context.fillRect(0, 0, canvas.width,canvas.height);
-    // context.fillStyle = "blue";
-
-    // context.lineWidth = 2;
-    // context.strokeStyle = '#000000';
-    // context.clearRect(0, 0, width, height);
-
-
-    // context.beginPath();
-    // context.moveTo(0, canvas.height / 2);
-    // for (const item of audioData) {
-
-    //   console.log(item)
-    // const y = (item / 255.0) * canvas.height;
-    // context.lineTo(x, y);
-    // x += sliceWidth;
-    // }
-    // context.lineTo(x, canvas.height / 2);
-    // context.stroke();
   }
 
   render() {
